@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class GemControl : MonoBehaviour
@@ -16,13 +18,17 @@ public class GemControl : MonoBehaviour
     public int numBot = 0;
     public string color = "clear";
 
+    //set the list of the sprite so later The sprite can change
     public List<Sprite> spr;
 
+    //set different text to change
     [SerializeField] private Text Blue;
     [SerializeField] private Text Green;
     [SerializeField] private Text Red;
     [SerializeField] private Text Total;
+    [SerializeField] private Text warning;
 
+    //set up the game object so later can genrate when ger result
     public GameObject DarkPurpleGem;
     public GameObject DarkBronwnGem;
     public GameObject DarkTealGem;
@@ -31,6 +37,7 @@ public class GemControl : MonoBehaviour
     public GameObject LightTealGem;
     void Start()
     {
+        //get the collider and rigidbody before the game start
         rb = GetComponent<Rigidbody2D>();
         potCollider = GetComponent<Collider2D>();
     }
@@ -38,7 +45,9 @@ public class GemControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(RedNum < BlueNum)
+
+        //this is the main program that allow the game to calculate what kind of gem player is making, based on the different color combination, the output will be different
+        if (RedNum < BlueNum)
         {
            color =  "DarkPurple";
         }
@@ -63,10 +72,11 @@ public class GemControl : MonoBehaviour
             color = "LightTeal";
         }
 
-
-        if (numBot > 5 && Input.GetMouseButtonDown(1))
+        //if there are five or more elements in the pot, player can start making the gem by right click
+        if (numBot >= 5 && Input.GetMouseButtonDown(1))
         {
             Debug.Log("good");
+            //set everything back to 0 after making the gem
             numBot = 0;
             BlueNum = 0;
             GreenNum = 0;
@@ -76,7 +86,9 @@ public class GemControl : MonoBehaviour
             Blue.text = "Blue: " + BlueNum;
             Green.text = "Green: " + GreenNum;
 
+            //set the gem span position, which is disgned
             Vector3 spawnPosition = new Vector3(-0.07f, -2.48f, -1f);
+            //besed on the different result of the color combination, the gem that will be genrated will be different 
             switch (color)
             { 
                 case "DarkPurple":
@@ -100,6 +112,7 @@ public class GemControl : MonoBehaviour
             }
         }
 
+        //based on how many elements where put into the pod, the sprite of the pot will be different
         switch (numBot)
         {
             case 0:
@@ -112,15 +125,18 @@ public class GemControl : MonoBehaviour
                 GetComponent<SpriteRenderer>().sprite = spr[2];
                 break;
         }
-
+        //if there is 10 elements in the pod, players can't put more elements into the pod
         if (numBot == 10)
         {
             potCollider.isTrigger = false;
         }
+        //the word will display if the pot is full or not
+        string deathMessage = (numBot < 10) ? warning.text = "Pot is not full!" : warning.text = "Pot is full!";
+
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        //when player put the gem inro the pod, react based on the color that player put into the pod, then destory the gem
+        //when player put the gem into the pod, react based on the color that player put into the pod, then destory the gem, calculate how many gems where inside the pod that shares the same color, and calculate the total amount of the gems
         if (collision.gameObject.CompareTag("Red"))
         {
             RedNum++;
