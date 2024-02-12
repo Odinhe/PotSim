@@ -26,7 +26,7 @@ public class GemControl : MonoBehaviour
     [SerializeField] private Text Green;
     [SerializeField] private Text Red;
     [SerializeField] private Text Total;
-    [SerializeField] private Text warning;
+    [SerializeField] public Text Warning;
 
     //set up the game object so later can genrate when ger result
     public GameObject DarkPurpleGem;
@@ -72,6 +72,8 @@ public class GemControl : MonoBehaviour
             color = "LightTeal";
         }
 
+       
+
         //if there are five or more elements in the pot, player can start making the gem by right click
         if (numBot >= 5 && Input.GetMouseButtonDown(1))
         {
@@ -85,6 +87,7 @@ public class GemControl : MonoBehaviour
             Red.text = "Red: " + RedNum;
             Blue.text = "Blue: " + BlueNum;
             Green.text = "Green: " + GreenNum;
+            Warning.text = "Pot is not full!";
 
             //set the gem span position, which is disgned
             Vector3 spawnPosition = new Vector3(-0.07f, -2.48f, -1f);
@@ -131,11 +134,11 @@ public class GemControl : MonoBehaviour
             potCollider.isTrigger = false;
         }
         //the word will display if the pot is full or not
-        string deathMessage = (numBot < 10) ? warning.text = "Pot is not full!" : warning.text = "Pot is full!";
 
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
+
         //when player put the gem into the pod, react based on the color that player put into the pod, then destory the gem, calculate how many gems where inside the pod that shares the same color, and calculate the total amount of the gems
         if (collision.gameObject.CompareTag("Red"))
         {
@@ -144,7 +147,9 @@ public class GemControl : MonoBehaviour
             Red.text = "Red: " + RedNum;
             Total.text = "Total: " + numBot;
             Debug.Log(RedNum);
+
             Destroy(collision.gameObject);
+
         }
         if (collision.gameObject.CompareTag("Blue"))
         {
@@ -162,5 +167,8 @@ public class GemControl : MonoBehaviour
             Total.text = "Total: " + numBot;
             Destroy(collision.gameObject);
         }
+        string potMessage = (numBot <= 9) ? "Pot is not full!" : "Pot is full!";
+        Debug.Log(potMessage);
+        Warning.text = potMessage;
     }
 }
