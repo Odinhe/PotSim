@@ -21,9 +21,9 @@ public class GemMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        string dragMessage = (isMoving == true) ? "You are grabbing an element!" : "You are not grabbing anything!";
-        Debug.Log(dragMessage);
-        warning.text = dragMessage;
+        //string dragMessage = (isMoving == true) ? "You are grabbing an element!" : "You are not grabbing anything!";
+        //Debug.Log(dragMessage);
+        //warning.text = dragMessage;
         //if player is dragging the right mouse, then the position of the item changes based on the position of the mouse in the world
         if (isDragging)
         {
